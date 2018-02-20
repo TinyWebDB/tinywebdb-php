@@ -14,12 +14,12 @@ if (strpos('/' . $request, '/' . $url_trigger . '/')) {
     header("HTTP/1.1 200 OK");
     $tinywebdb_key = explode($url_trigger . '/', $request);
     $tinywebdb_key = $tinywebdb_key[1];
-    $tinywebdb_key = explode('/', $tinywebdb_key);
+    $tinywebdb_key = explode('?', $tinywebdb_key);
     $action        = $tinywebdb_key[0];
     switch ($action) {
         case "getvalue": // this action enable from v 0.1.x
             // JSON_API , Post Parameters : tag
-            $tagName  = $_POST['tag'];
+            $tagName  = $_REQUEST['tag'];
             $tagValue = file_get_contents($tagName . ".txt");
             header('Cache-Control: no-cache, must-revalidate');
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
@@ -63,12 +63,24 @@ if (strpos('/' . $request, '/' . $url_trigger . '/')) {
     }
 }
 
+$listLog = array();
+$listTxt = array();
+if ($handler = opendir("./")) {
+    while (($sub = readdir($handler)) !== FALSE) {
+        if (substr($sub, -4, 4) == ".txt") {
+            $listTxt[] = $sub;
+        } elseif (substr($sub, 0, 10) == "tinywebdb_") {
+            $listLog[] = $sub;
+        }
+    }
+    closedir($handler);
+}
 ?>
 
 <h1>TinyWebDB API and Log Tail</h1>
 <h2>TinyWebDB API</h2>
 <h3>TinyWebDB "getvalue" test form</h3>
-<form method="POST" action="http://scc.digilib.org/api/getvalue">
+<form method="GET" action="http://scc.digilib.org/api/getvalue">
         tag: <input type="text" name="tag" value="led12345"><br>
         <input type="submit" value="submit">
 </form>
@@ -82,22 +94,32 @@ if (strpos('/' . $request, '/' . $url_trigger . '/')) {
 </form>
 
 <?php
+echo "<h3>TinyWebDB Tags</h3>";
+echo "<table border=1>";
+echo "<thead><tr>";
+echo "<th> Tag Name </th>";
+echo "<th> Size </th>";
+echo "</tr></thead>\n";
+if ($listTxt) {
+    sort($listTxt);
+    foreach ($listTxt as $sub) {
+        echo "<tr>";
+        echo "<td><a href=getvalue?tag=" . substr($sub, 0, -4) . ">" .substr($sub, 0, -4) . "</a></td>\n";
+        echo "<td>" . filesize("./" . $sub) . "</td>\n";
+        echo "</tr>";
+    }
+}
+echo "</table>";
+
 echo "<h3>TinyWebDB Log Tail</h3>";
 echo "<table border=1>";
 echo "<thead><tr>";
 echo "<th> Log Name </th>";
 echo "<th> Size </th>";
 echo "</tr></thead>\n";
-$listDir = array();
-if ($handler = opendir("./")) {
-    while (($sub = readdir($handler)) !== FALSE) {
-        if (substr($sub, 0, 10) == "tinywebdb_") {
-            $listDir[] = $sub;
-        }
-    }
-    closedir($handler);
-    sort($listDir);
-    foreach ($listDir as $sub) {
+if ($listLog) {
+    sort($listLog);
+    foreach ($listLog as $sub) {
         echo "<tr>";
         echo "<td><a href=?logfile=" . $sub . ">$sub</a></td>\n";
         echo "<td>" . filesize("./" . $sub) . "</td>\n";
@@ -105,6 +127,7 @@ if ($handler = opendir("./")) {
     }
 }
 echo "</table>";
+
 if ($_GET['logfile']) {
     $logfile = substr($_GET['logfile'], 0, 24);
     echo "<h2>Log file : " . $logfile . "</h2>";
@@ -115,7 +138,7 @@ if ($_GET['logfile']) {
 }
 
 
-exit; // this stops WordPress entirely
+exit; // this stops rest steps
 
 function wp_tinywebdb_api_read_tail($file, $lines)
 {
