@@ -8,9 +8,12 @@ Fertures:
 - Test Form: 
     - send storevalue request 
     - send getvalue request 
+- Tag View
+    - List all tags
+    - The tags link to getvalue API
 - Log tail viewer 
     - Daily log file 
     - last 20 lines view 
 
 Test site URL :
-- http://scc.digilib.org/api/
+- http://webdb.cf/api/
