@@ -80,13 +80,13 @@ if ($handler = opendir("./")) {
 <h1>TinyWebDB API and Log Tail</h1>
 <h2>TinyWebDB API</h2>
 <h3>TinyWebDB "getvalue" test form</h3>
-<form method="GET" action="http://scc.digilib.org/api/getvalue">
+<form method="POST" action="/api/getvalue">
         tag: <input type="text" name="tag" value="led12345"><br>
         <input type="submit" value="submit">
 </form>
 
 <h3>TinyWebDB "storeavalue" test form</h3>
-<form action="http://scc.digilib.org/api/storeavalue" method="post">
+<form action="/api/storeavalue" method="post">
   <div>tag: <input type="text" name="tag" value="led12345"></div>
   <div>value: <input type="text" name="value" value="blink"></div>
   <input type="submit" value="submit">
