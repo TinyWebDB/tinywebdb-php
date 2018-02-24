@@ -20,7 +20,8 @@ if (strpos('/' . $request, '/' . $url_trigger . '/')) {
         case "getvalue": // this action enable from v 0.1.x
             // JSON_API , Post Parameters : tag
             $tagName  = $_REQUEST['tag'];
-            $tagValue = file_get_contents($tagName . ".txt");
+            $tagValue = '';
+            is_file($tagName . ".txt") && ($tagValue = file_get_contents($tagName . ".txt"));
             header('Cache-Control: no-cache, must-revalidate');
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
             header('Content-type: application/json');
@@ -35,16 +36,16 @@ if (strpos('/' . $request, '/' . $url_trigger . '/')) {
             // JSON_API , Post Parameters : tag,value
             $tagName     = $_POST['tag'];
             $tagValue    = $_POST['value'];
-            $apiKey      = $_POST['apikey'];
+            $apiKey      = '';	// $_POST['apikey'];
             $log_message = sprintf("%s:%s\n", date('Y-m-d H:i:s'), "storeavalue: ($apiKey) $tagName -- $tagValue");
             $file_name   = 'tinywebdb_' . date('Y-m-d') . '.log';
             error_log($log_message, 3, $file_name);
             $setting_apikey = '';
             if ($apiKey == $setting_apikey) {
                 
-                $fh = fopen($tagName . ".txt", "w");
-                fputs($fh, $tagValue);
-                fclose(fh);
+                $fh = fopen($tagName . ".txt", "w") or die("check file write permission.");
+                fwrite($fh, $tagValue);
+                fclose($fh);
                 header('Cache-Control: no-cache, must-revalidate');
                 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
                 header('Content-type: application/json');
