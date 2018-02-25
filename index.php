@@ -42,7 +42,11 @@ if (strpos('/' . $request, '/' . $url_trigger . '/')) {
             error_log($log_message, 3, $file_name);
             $setting_apikey = '';
             if ($apiKey == $setting_apikey) {
-                
+                if(strlen($tagValue) == 0) { 
+		    unlink($tagName . ".txt");
+                    echo "Removed tagName: " . $tagName;
+		    exit;
+		}
                 $fh = fopen($tagName . ".txt", "w") or die("check file write permission.");
                 fwrite($fh, $tagValue);
                 fclose($fh);
