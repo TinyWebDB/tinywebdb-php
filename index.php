@@ -1,18 +1,19 @@
 <?php
-$request = $_SERVER['REQUEST_URI'];
-if (!isset($_SERVER['REQUEST_URI'])) {
+if (isset($_SERVER['REQUEST_URI'])) {
+    $request = $_SERVER['REQUEST_URI'];
+} else {
     $request = substr($_SERVER['PHP_SELF'], 1);
     if (isset($_SERVER['QUERY_STRING']) AND $_SERVER['QUERY_STRING'] != '') {
         $request .= '?' . $_SERVER['QUERY_STRING'];
     }
 }
-$url_trigger = 'api';
+$url_trigger = 'api/';
 if (isset($_POST['action'])) {
-    $request = '/' . $url_trigger . '/' . $_POST['action'] . '/';
+    $request = '/' . $url_trigger . $_POST['action'] . '/';
 }
-if (strpos('/' . $request, '/' . $url_trigger . '/')) {
+if (strpos($request, $url_trigger)) {
     header("HTTP/1.1 200 OK");
-    $tinywebdb_key = explode($url_trigger . '/', $request);
+    $tinywebdb_key = explode($url_trigger, $request);
     $tinywebdb_key = $tinywebdb_key[1];
     $tinywebdb_key = explode('?', $tinywebdb_key);
     $action        = $tinywebdb_key[0];
@@ -133,7 +134,7 @@ if ($listLog) {
 }
 echo "</table>";
 
-if ($_GET['logfile']) {
+if (isset($_GET['logfile'])) {
     $logfile = substr($_GET['logfile'], 0, 24);
     echo "<h2>Log file : " . $logfile . "</h2>";
     $lines = wp_tinywebdb_api_read_tail($logfile, 20);
