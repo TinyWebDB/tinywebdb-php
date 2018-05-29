@@ -84,7 +84,7 @@ if ($handler = opendir("./")) {
 ?>
 
 <h1>TinyWebDB API and Log Tail</h1>
-<h2>TinyWebDB API</h2>
+<p>a textfile based TinyWebDB test implement. <a href="https://github.com/edu2web/tinywebdb-php">read more...</a></p>
 <h3>TinyWebDB "getvalue" test form</h3>
 <form method="POST" action="/api/getvalue">
         tag: <input type="text" name="tag" value="led12345"><br>
