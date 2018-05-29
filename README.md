@@ -16,4 +16,4 @@ Fertures:
     - last 20 lines view 
 
 Test site URL :
-- http://webdb.cf/api/
+- http://tinywebdb.api0.net/api/
