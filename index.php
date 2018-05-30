@@ -7,13 +7,13 @@ if (isset($_SERVER['REQUEST_URI'])) {
         $request .= '?' . $_SERVER['QUERY_STRING'];
     }
 }
-$url_trigger = 'api/';
 if (isset($_POST['action'])) {
-    $request = '/' . $url_trigger . $_POST['action'] . '/';
+    $request = $_POST['action'] . '/';
 }
-if (strpos($request, $url_trigger)) {
+
+{
     header("HTTP/1.1 200 OK");
-    $tinywebdb_key = explode($url_trigger, $request);
+    $tinywebdb_key = explode('/', $request);
     $tinywebdb_key = $tinywebdb_key[1];
     $tinywebdb_key = explode('?', $tinywebdb_key);
     $action        = $tinywebdb_key[0];
@@ -81,25 +81,9 @@ if ($handler = opendir("./")) {
     }
     closedir($handler);
 }
-?>
 
-<h1>TinyWebDB API and Log Tail</h1>
-<p>a textfile based TinyWebDB test implement. <a href="https://github.com/edu2web/tinywebdb-php">read more...</a></p>
-<h3>TinyWebDB "getvalue" test form</h3>
-<form method="POST" action="/api/getvalue">
-        tag: <input type="text" name="tag" value="led12345"><br>
-        <input type="submit" value="submit">
-</form>
+include_once("main.html");
 
-<h3>TinyWebDB "storeavalue" test form</h3>
-<form action="/api/storeavalue" method="post">
-  <div>tag: <input type="text" name="tag" value="led12345"></div>
-  <div>value: <input type="text" name="value" value="blink"></div>
-  <input type="submit" value="submit">
-  <input type="reset" value="reset">
-</form>
-
-<?php
 echo "<h3>TinyWebDB Tags</h3>";
 echo "<table border=1>";
 echo "<thead><tr>";
