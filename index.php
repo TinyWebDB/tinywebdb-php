@@ -84,7 +84,8 @@ if ($handler = opendir("./")) {
 
 include_once("main.html");
 
-echo "<h3>TinyWebDB Tags</h3>";
+if (file_exists('tags.php')) echo "<h3>TinyWebDB <a href=tags.php>Tags</a></h3>";
+else echo "<h3>TinyWebDB Tags</h3>";
 echo "<table border=1>";
 echo "<thead><tr>";
 echo "<th> Tag Name </th>";
@@ -120,6 +121,7 @@ echo "</table>";
 
 if (isset($_GET['logfile'])) {
     $logfile = substr($_GET['logfile'], 0, 24);
+    if (file_exists('draw.php')) echo "<p><img src = 'draw.php?logfile=$logfile'></p>";
     echo "<h2>Log file : " . $logfile . "</h2>";
     $lines = wp_tinywebdb_api_read_tail($logfile, 20);
     foreach ($lines as $line) {
