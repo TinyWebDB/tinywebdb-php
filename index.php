@@ -13,10 +13,8 @@ if (isset($_POST['action'])) {
 
 {
     header("HTTP/1.1 200 OK");
-    $tinywebdb_key = explode('/', $request);
-    $tinywebdb_key = $tinywebdb_key[1];
-    $tinywebdb_key = explode('?', $tinywebdb_key);
-    $action        = $tinywebdb_key[0];
+    $path = parse_url ($request, PHP_URL_PATH);
+    $action = basename( $path );
     switch ($action) {
         case "getvalue": // this action enable from v 0.1.x
             // JSON_API , Post Parameters : tag
