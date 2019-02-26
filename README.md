@@ -23,4 +23,4 @@ Fertures:
     - last 20 lines view 
 
 Test site URL :
-- http://tinywebdb.api0.net/
+- http://test.tinywebdb.org/
