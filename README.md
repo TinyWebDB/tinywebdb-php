@@ -28,4 +28,4 @@ a textfile based TinyWebDB implement. not any db required.
 3) clone all files to virture host root. 
 
 # Test site URL :
-- http://test.tinywebdb.org/
+- http://tinywebdb.cf/
