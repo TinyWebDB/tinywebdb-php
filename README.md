@@ -1,5 +1,5 @@
 # tinywebdb-php
-a textfile based TinyWebDB implement. not any db required.
+a TinyWebDB implementation based on PHP and textfile. No database is required.
 
 # TinyWebDB Protocol:  
 
