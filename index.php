@@ -125,11 +125,13 @@ echo "</table>";
 
 if (isset($_GET['logfile'])) {
     $logfile = substr($_GET['logfile'], 0, 24);
-    if (file_exists('draw.php')) echo "<p><img src = 'draw.php?logfile=$logfile'></p>";
     echo "<h2>Log file : " . $logfile . "</h2>";
-    $lines = wp_tinywebdb_api_read_tail($logfile, 20);
-    foreach ($lines as $line) {
-        echo $line . "<br>";
+    if (file_exists($logfile)) {
+	if (file_exists('draw.php')) echo "<p><img src = 'draw.php?logfile=$logfile'></p>";
+	$lines = wp_tinywebdb_api_read_tail($logfile, 20);
+	foreach ($lines as $line) {
+	    echo $line . "<br>";
+	}
     }
 }
 

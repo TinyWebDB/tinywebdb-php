@@ -1,14 +1,14 @@
 # tinywebdb-php
-a textfile based TinyWebDB implement. not any db required.
+a TinyWebDB implementation based on PHP and textfile. No database is required.
 
-TinyWebDB Protocol:  
+# TinyWebDB Protocol:  
 
 |    Action        |URL                      |Post Parameters  |Response                          |
 |------------------|-------------------------|-----------------|----------------------------------|
 |    Get Value     |{ServiceURL}/getvalue    |tag              |JSON: ["VALUE","{tag}", {value}]  |
 |    Store A Value |{ServiceURL}/storeavalue |tag,value        |JSON: ["STORED", "{tag}", {value}]|
 
-Fertures:
+# Fertures:
 - TinyWebDB API 
     - handle storevalue request, then save to a textfile. 
     - handle getvalue request and return content from the textfile. 
@@ -22,5 +22,10 @@ Fertures:
     - Daily log file 
     - last 20 lines view 
 
-Test site URL :
-- http://test.tinywebdb.org/
+# Install
+1) create an Apache virtual host 
+2) Enable .htaccess. (set AllowOverride to All)
+3) clone all files to virture host root. 
+
+# Test site URL :
+- http://tinywebdb.cf/
