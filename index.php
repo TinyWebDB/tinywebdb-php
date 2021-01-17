@@ -86,7 +86,9 @@ if (file_exists('tags.php')) echo "<h3>TinyWebDB <a href=tags.php>Tags</a></h3>"
 else echo "<h3>TinyWebDB Tags</h3>";
 echo "<table border=1>";
 echo "<thead><tr>";
-echo "<th> Tag Name </th>";
+echo "<th> Tag </th>";
+echo "<th> Value </th>";
+echo "<th> Time </th>";
 echo "<th> Size </th>";
 echo "</tr></thead>\n";
 if ($listTxt) {
@@ -94,6 +96,10 @@ if ($listTxt) {
     foreach ($listTxt as $sub) {
         echo "<tr>";
         echo "<td><a href=getvalue?tag=" . substr($sub, 0, -4) . ">" .substr($sub, 0, -4) . "</a></td>\n";
+        echo "<td>" ; 
+	readfile("./" . $sub) ; 
+	echo "</td>\n";
+        echo "<td>" . date('Y-m-d H:i:s',filemtime("./" . $sub)) . "</td>\n";
         echo "<td>" . filesize("./" . $sub) . "</td>\n";
         echo "</tr>";
     }
