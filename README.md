@@ -1,13 +1,11 @@
 # tinywebdb-php
 a TinyWebDB implementation based on PHP and textfile. No database is required.
 
-###
-### This is a web service for use with App
-### Inventor for Android (<http://appinventor.googlelabs.com>)
-### This particular service stores and retrieves tag-value pairs 
-### using the protocol necessary to communicate with the TinyWebDB
-### component of an App Inventor app.
-###
+
+ This is a web service for use with App Inventor for Android / iOS and other light web service.  
+ This particular service stores and retrieves tag-value pairs   
+ using the protocol necessary to communicate with the TinyWebDB component of an App Inventor app.  
+
 
 
 # TinyWebDB Protocol:  
