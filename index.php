@@ -20,7 +20,8 @@ if (isset($_POST['action'])) {
             // JSON_API , Post Parameters : tag
             $tagName  = $_REQUEST['tag'];
             $tagValue = '';
-            is_file($tagName . ".txt") && ($tagValue = file_get_contents($tagName . ".txt"));
+            $file_name   = "_data/" . $tagName . ".txt";
+            is_file($file_name) && ($tagValue = file_get_contents($file_name));
             header('Cache-Control: no-cache, must-revalidate');
             header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
             header('Content-type: application/json');
@@ -37,16 +38,16 @@ if (isset($_POST['action'])) {
             $tagValue    = $_POST['value'];
             $apiKey      = '';	// $_POST['apikey'];
             $log_message = sprintf("%s:%s\n", date('Y-m-d H:i:s'), "storeavalue: ($apiKey) $tagName -- $tagValue");
-            $file_name   = 'tinywebdb_' . date('Y-m-d') . '.log';
+            $file_name   = '_log/tinywebdb_' . date('Y-m-d') . '.log';
             error_log($log_message, 3, $file_name);
             $setting_apikey = '';
             if ($apiKey == $setting_apikey) {
                 if(strlen($tagValue) == 0) { 
-		    unlink($tagName . ".txt");
+		    unlink("_data/" . $tagName . ".txt");
                     echo "Removed tagName: " . $tagName;
 		    exit;
 		}
-                $fh = fopen($tagName . ".txt", "w") or die("check file write permission.");
+                $fh = fopen("_data/" . $tagName . ".txt", "w") or die("check file write permission.");
                 fwrite($fh, $tagValue);
                 fclose($fh);
                 header('Cache-Control: no-cache, must-revalidate');
@@ -68,14 +69,16 @@ if (isset($_POST['action'])) {
 }
 
 $listLog = array();
-$listTxt = array();
-if ($handler = opendir("./")) {
+if ($handler = opendir("_log/")) {
     while (($sub = readdir($handler)) !== FALSE) {
-        if (substr($sub, -4, 4) == ".txt") {
-            $listTxt[] = $sub;
-        } elseif (substr($sub, 0, 10) == "tinywebdb_") {
-            $listLog[] = $sub;
-        }
+        if(is_file("_log/" . $sub)) $listLog[] = $sub;
+    }
+    closedir($handler);
+}
+$listTxt = array();
+if ($handler = opendir("_data/")) {
+    while (($sub = readdir($handler)) !== FALSE) {
+        if(is_file("_data/" . $sub)) $listTxt[] = $sub;
     }
     closedir($handler);
 }
@@ -96,9 +99,11 @@ if ($listTxt) {
     foreach ($listTxt as $sub) {
         echo "<tr>";
         echo "<td><a href=getvalue?tag=" . substr($sub, 0, -4) . ">" .substr($sub, 0, -4) . "</a></td>\n";
-        echo "<td>" ; readfile("./" . $sub) ; echo "</td>\n";
-        echo "<td>" . date('Y-m-d H:i:s',filemtime("./" . $sub)) . "</td>\n";
-        echo "<td>" . filesize("./" . $sub) . "</td>\n";
+        echo "<td>" ; 
+	readfile("_data/" . $sub) ; 
+	echo "</td>\n";
+        echo "<td>" . date('Y-m-d H:i:s',filemtime("_data/" . $sub)) . "</td>\n";
+        echo "<td>" . filesize("_data/" . $sub) . "</td>\n";
         echo "</tr>";
     }
 }
@@ -115,7 +120,7 @@ if ($listLog) {
     foreach ($listLog as $sub) {
         echo "<tr>";
         echo "<td><a href=?logfile=" . $sub . ">$sub</a></td>\n";
-        echo "<td>" . filesize("./" . $sub) . "</td>\n";
+        echo "<td>" . filesize("_log/" . $sub) . "</td>\n";
         echo "</tr>";
     }
 }
@@ -123,13 +128,11 @@ echo "</table>";
 
 if (isset($_GET['logfile'])) {
     $logfile = substr($_GET['logfile'], 0, 24);
+    if (file_exists('draw.php')) echo "<p><img src = 'draw.php?logfile=$logfile'></p>";
     echo "<h2>Log file : " . $logfile . "</h2>";
-    if (file_exists($logfile)) {
-	if (file_exists('draw.php')) echo "<p><img src = 'draw.php?logfile=$logfile'></p>";
-	$lines = wp_tinywebdb_api_read_tail($logfile, 20);
-	foreach ($lines as $line) {
-	    echo $line . "<br>";
-	}
+    $lines = wp_tinywebdb_api_read_tail("_log/" . $logfile, 20);
+    foreach ($lines as $line) {
+        echo $line . "<br>";
     }
 }
 
