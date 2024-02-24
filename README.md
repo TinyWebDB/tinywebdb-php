@@ -35,6 +35,5 @@ a TinyWebDB implementation based on PHP and textfile. No database is required.
 3) clone all files to virture host root. 
 
 # Test site URL :
-- http://tinydb.gq
-- http://tinydb.ml
-- http://tinydb.tk
+- http://tinydb.digilib.org
+- http://tinydb.edu2web.com
