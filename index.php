@@ -34,8 +34,8 @@ if (isset($_POST['action'])) {
             break;
         case "storeavalue": // this action will enable from v 0.2.x
             // JSON_API , Post Parameters : tag,value
-            $tagName     = $_POST['tag'];
-            $tagValue    = $_POST['value'];
+            $tagName     = $_REQUEST['tag'];
+            $tagValue    = $_REQUEST['value'];
             $apiKey      = '';	// $_POST['apikey'];
             $log_message = sprintf("%s:%s\n", date('Y-m-d H:i:s'), "storeavalue: ($apiKey) $tagName -- $tagValue");
             $file_name   = '_log/tinywebdb_' . date('Y-m-d') . '.log';
@@ -143,6 +143,12 @@ function wp_tinywebdb_api_read_tail($file, $lines)
 {
     //global $fsize;
     $handle      = fopen($file, "r");
+    if ($handle === false) {
+        // 可以记录日志或抛出异常，避免后续出错
+        error_log("Failed to open file: " . $file);
+        return array();  // 或者返回 null、false，按需要处理
+    }
+
     $linecounter = $lines;
     $pos         = -2;
     $beginning   = false;
